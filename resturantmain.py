@@ -1,9 +1,9 @@
-import inputvalidation, time, os
+import inputvalidation, time, os, sys
 
 restaurant_menu = [
-    ("item 1", "price (is a float)"), 
-    ("item 2", "price is a float)"), 
-    ("item 3", "price (is a float)")]
+    ("item 1", 9.99), 
+    ("item 2", 8.99), 
+    ("item 3", 15.99)]
 
 order = [
 
@@ -20,26 +20,107 @@ meal_contents = {
     "item 8": ["ingredient 1", "ingredient 2", "ingredient 3"],
 }
 
-def menu():
-    menu_choice = inputvalidation.pos_int("1. - Add meal to order\n2. - Edit order\n3. - Print order\n4. - Confirm order\n5. - Exit", "Please enter a valid choice (1, 2, 3, 4, or 5)")
-    evaluate_input(menu_choice, 1)
+def menu(iteration):
+    """
+    """
+    if iteration == 1:
+        menu_choice = inputvalidation.pos_int("1. - Add meal to order\n2. - Exit\n", "Please enter a valid choice (1, 2, or 3)")
+        evaluate_input(menu_choice, 1)
+    elif iteration == 2:
+        menu_choice = inputvalidation.pos_int("1. - Add meal to order\n2. - Edit order\n3. - Print order\n4. - Confirm order\n5. - Exit\n", "Please enter a valid choice (1, 2, 3, 4, or 5)")
+        evaluate_input(menu_choice, 2)
+    
+def edit_order():
+    print("Edit order")
 
 def add_meal():
-    print("Placeholder")
+    """
+    """
+    os.system("clear")
+    print_menu()
+    wanted_meal = inputvalidation.pos_int("", "Please entere a valid meal option")
+    while True:
+        if wanted_meal == 1:
+            selected_meal = restaurant_menu[0]
+            order.append(selected_meal)
+            print(order)
+            break
+        elif wanted_meal == 2:
+            selected_meal = restaurant_menu[1]
+            order.append(selected_meal)
+            print(order)
+            break
+        elif wanted_meal == 3:
+            selected_meal = restaurant_menu[2]
+            order.append(selected_meal)
+            print(order)
+            break
+        else:
+            print("You selected a meal that does not exist, please try again")
+            add_meal()
+            break
+    print("Meal added")
+    time.sleep(1)
+    os.system("clear")
+    menu(2)
+    
 
 def edit_meal():
-    print("Placeholder")
+    print("Edit Meal")
 
 def get_price():
-    print("Placeholder")
+    print("Get price")
+
+def print_menu():
+    """
+    """
+    meal_counter = 1
+    for item in restaurant_menu:
+        print(f"{meal_counter}. - ${item[1]} {item[0]}")
+        meal_counter += 1
 
 def print_order():
-    print("Placeholder")
+    print("Print order")
+
+def confirm_order():
+    print("Confirm order")
 
 def evaluate_input(choice, iteration):
-    print("Placeholder")
+    """
+    """
+    if iteration == 1:
+        while True:
+            if choice == 1:
+                add_meal()
+                break
+            elif choice == 2:
+                sys.exit("The program has ended")
+            else:
+                print("You entered a choice that does not exist, please try again")
+                menu(1)
+    elif iteration == 2:
+        while True:
+            if choice == 1:
+                add_meal()
+                break
+            elif choice == 2:
+                edit_order()
+                break
+            elif choice == 3:
+                print_order()
+                break
+            elif choice == 4:
+                confirm_order()
+                break
+            elif choice == 5:
+                sys.exit("The program has ended")
+            else:
+                os.system("clear")
+                print("You entered a choice that does not exist, please try again")
+                menu(2)
 
 
+menu(1)
 
 """
 Print menu. Let operator select what they want to do: 
