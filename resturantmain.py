@@ -21,20 +21,62 @@ meal_contents = {
     "item 8": ["ingredient 1", "ingredient 2", "ingredient 3"],
 }
 
-def menu(iteration):
+def menu():
     """
     """
+    print("At menu")
 #checks what menu is applicable for the operators situation and acts accordingly
-    if iteration == 1:
+    if len(order) == 0:
         menu_choice = inputvalidation.pos_int("1. - Add meal to order\n2. - Exit\n", "Please enter a valid choice (1 or 2)")
+        os.system("clear")
         #calls function that acts accordingly to what the operator asks for
         evaluate_input(menu_choice, 1)
-    elif iteration == 2:
-        menu_choice = inputvalidation.pos_int("1. - Add meal to order\n2. - Edit order\n3. - Print order\n4. - Confirm order\n5. - Exit\n", "Please enter a valid choice (1, 2, 3, 4, or 5)")
+    elif len(order) >= 1:
+        menu_choice = inputvalidation.pos_int("1. - Add meal to order\n2. - Remove item from order\n3. - Print order\n4. - Confirm order\n5. - Exit\n", "Please enter a valid choice (1, 2, 3, 4, or 5)")
+        os.system("clear")
         evaluate_input(menu_choice, 2)
-    
+
+
+def print_meals():
+    """
+    This function prints each meal that is in the customers order and assigns a number to it
+    """
+    #sets a variable to one so it can give options to the user from 1 upwards
+    item_counter = 1
+#for each item in the customers order this loops
+    for item in order:
+        #prints out a number and an item from the list that now corrso=ponds to that number
+        print(f"{item_counter}. - {item[0]}")
+        item_counter += 1
+
+
 def edit_order():
-    print("Edit order")
+    print_order()
+    while True:
+        print_meals()
+        #asks the operator what item they want to be removed from the order
+        targeted_item = inputvalidation.pos_int("Please enter the meal you want to remove: ", "You attempted to remove a meal that does not exist, please try again")
+        #sets a counter to 1 that is used to check what item is targeted
+        option_counter = 1
+        for item in order:
+        #checks if targeted item (an integer the user has entered) is the same as option counter and then acts accordingly
+            if option_counter == targeted_item:
+                #sets targeted item to the item that is causing this iteration of the loop (the item the user wants) 
+                targeted_item = item
+                order.remove(item)
+                print("Meal removed")
+                option_counter = 0
+                break
+        #checks if option counter is greater than the length of the order. If it is, it means that the option the user has entered does not exist.
+            option_counter += 1   
+            if option_counter > len(order):
+                os.system("clear")
+                print("You attempted to remove a meal that does not exist, please try again")   
+    #checks if option counter has been set to zero, if this has it means that an item has succesfully been removed from the order
+        if option_counter == 0:
+            break
+    os.system("clear")
+    menu()
 
 
 def print_menu():
@@ -53,45 +95,95 @@ def print_menu():
 def add_meal():
     """
     """
+    print("Adding meal")
     #creates a variable that saves what meal the operator wants 
-    wanted_meal = inputvalidation.pos_int(print_menu(), "Please enter a valid meal option")
     while True:
-        #checks what meal the operator has selected and acts accordingly
-        if wanted_meal == 1:
-            #saves the chosen meal from restaurant menu to a variable 
-            selected_meal = restaurant_menu[0]
-            #adds this meal to the customers order
-            order.append(selected_meal)
-            print(order)
-            break
-        elif wanted_meal == 2:
-            selected_meal = restaurant_menu[1]
-            order.append(selected_meal)
-            print(order)
-            break
-        elif wanted_meal == 3:
-            selected_meal = restaurant_menu[2]
-            order.append(selected_meal)
-            print(order)
-            break
-        else:
-            print("You selected a meal that does not exist, please try again")
-            add_meal()
+        #asks the operator what item the customer wants
+        wanted_meal = inputvalidation.pos_int(print_menu(), "Please enter a valid meal option")
+        os.system("clear")
+        menu_counter = 1
+     #for each item in the restaurants menu this loops
+        for item in restaurant_menu:
+        #checks if wanted meal (an integer the user has entered) is the same as menu counter and then acts accordingly
+            if menu_counter == wanted_meal:
+                #sets wanted meal to the item that is causing this iteration of the loop (the item the user wants) 
+                wanted_meal = item
+                wanted_meal = edit_meal(wanted_meal[0], wanted_meal[1])
+                order.append(wanted_meal)
+                menu_counter = 0
+                break
+        #checks if menu counter is greater than the length of the restaurants menu. If it is, it means that the meal the user has entered does not exist.
+            menu_counter += 1  
+            if menu_counter > len(restaurant_menu):
+                os.system("clear")
+                print("You selected a meal that does not exist, please try again")   
+    #checks if option counter has been set to zero, if this has it means that an item has succesfully been removed from the order 
+        if menu_counter == 0:
             break
     print("Meal added")
     time.sleep(1)
     os.system("clear")
-    menu(2)
+    menu()
     
 
-def edit_meal():
-    print("Edit Meal")
+def edit_meal(meal, price):
+    """
+    """
+    while True:
+        print(meal)
+        #asks the operator if they would like to edit the meal they are adding to the customers order
+        ask_operator = inputvalidation.pos_int("Would you like to edit the meal?\n1. - Yes\n2. - No\n", "You entered an invalid option, please try again")
+        os.system("clear")
+    #checks if the operator wants to edit the meal they are adding
+        if ask_operator == 1:
+            #gets the ingredients from the dictionary and makes a copy of them
+            meal_ingredients = meal_contents.get(meal).copy()
+            print(meal_ingredients)
+            ingredient_counter = 1
+        #loops for each ingredient in meal ingredients
+            for ingredient in meal_ingredients:
+                #prints ingredient counter and the ingredient that corrosponds to the number
+                print(f"{ingredient_counter}. - {ingredient}")
+                ingredient_counter += 1
+            #asks the user what ingredient they want removed from the meal that is being added to the customers order
+            selected_ingredient = inputvalidation.pos_int("Select which ingredient you want removed: ", "Please enter a valid ingredient")
+            ingredient_counter = 1
+        #loops for each ingredient in ingredient
+            for ingredient in meal_ingredients:
+            #checks if ingredient counter (the number corrosponding with an ingredient), is equal to the users input (selected ingredient) and acts accordingly
+                if ingredient_counter == selected_ingredient:
+                    #removes the ingredient from the meals ingredients
+                    meal_ingredients.remove(ingredient)
+                    print(f"{ingredient} removed")
+                    #adds what ingredient is being removed to the meal being added
+                    meal += (f" - no {ingredient} ")
+                    print(meal)
+                    #returns the new information regarding the meal 
+                    os.system("clear")
+                    return meal, price
+                ingredient_counter += 1
+            #checks if ingredient counter is bigger than meal ingredients (the amount of ingredients in the meal)
+                if ingredient_counter > len(meal_ingredients):
+                    os.system("clear")
+                    print("You attempted to remove an ingredient that does not exist, please try again")  
+        elif ask_operator == 2:
+            os.system("clear")
+            return meal, price
+        else:
+            os.system("clear")
+            print("You entered an invalid option, please try again")  
 
 
 def get_price():
+    """
+    """
+    #sets price to $0
     total_price = 0.00
+#loops for every item (meal, price) in order
     for item in order:
+        #adds the price from each meal into the total price
         total_price += item[1]   
+    #rounds price to 2 decimal points as it is a monetary amount and to prevent floating point errors
     total_price = round(total_price, 2)
     return total_price
 
@@ -99,22 +191,32 @@ def get_price():
 def print_order():
     """
     """
+    print("Printing order")
     os.system("clear")
     order.sort()
+    #makes and saves a copy of the users order in order to be able to edit it without changing their order
+    printable_order = order.copy()
+    print(printable_order)
+    #gets the total cost and sets it to a variable
     total_cost = get_price()
     print("Restaurant Name")
     print("Order:") 
-#for each list in restaurant menu it loops
-    for item in order:
-        meal_quantity = order.count(item)
+#for each list in the copy of the users order it loops
+    for item in printable_order:
+        #gets the amount of times a meal appears in the order and saves it to a variable
+        meal_quantity = printable_order.count(item)
         if meal_quantity != 1:
+        #loops for one less time than the amount of the same meal that is in the copy of the customers order
             for i in range(meal_quantity - 1):
-                order.remove(item)
+                #removes the item from the copy of the customers order
+                printable_order.remove(item)
                 i += 1
         #prints a number that represents then prints out the according meal and price from user order
-        print(f"X{str(meal_quantity):2s}{item[0]:10s}${item[1]}")
+        print(f"X{str(meal_quantity):3s}{item[0]:10s}${item[1]}")
     print("-----------------")
     print(f"{"Total:":13}${total_cost}\n")
+    print(order)
+    print(printable_order)
 
 
 def confirm_order():
@@ -129,14 +231,15 @@ def confirm_order():
             print("Order confirmed")
             #prints customer order
             print_order()
-            continue_on = input("Hit return to continue")
+            continue_on = input("Hit return or enter to continue")
+            #clears the list containing the customers order
             order.clear()
             os.system("clear")
-            menu(1)
+            menu()
             break
         elif check_confirmation == 2:
             os.system("clear")
-            menu(2)
+            menu()
             break
         else:
             print("You entered an invalid option, please try again")
@@ -158,7 +261,7 @@ def evaluate_input(choice, iteration):
             else:
                 print("You entered a choice that does not exist, please try again")
                 #returns to main menu
-                menu(1)
+                menu()
                 break
     elif iteration == 2:
         while True:
@@ -171,6 +274,9 @@ def evaluate_input(choice, iteration):
                 break
             elif choice == 3:
                 print_order()
+                continue_on = input("Hit return or enter to continue")
+                os.system("clear")
+                menu()
                 break
             elif choice == 4:
                 confirm_order()
@@ -180,11 +286,11 @@ def evaluate_input(choice, iteration):
             else:
                 os.system("clear")
                 print("You entered a choice that does not exist, please try again")
-                menu(2)
+                menu()
                 break
 
 os.system("clear")
-menu(1)
+menu()
 
 """
 Print menu. Let operator select what they want to do: 
