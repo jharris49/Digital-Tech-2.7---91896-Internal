@@ -1,9 +1,26 @@
+"""To do."""
 import time
 import os
 
 
 def check_input(message, variety, error_message):
-    """To do."""
+    """
+    Gets and validates input.
+    
+    This function gets user input, validates it,
+    and then returns it.
+
+    Parameters:
+        message (str): Message displayed when asking
+        for input.
+        variaty (data type): Type of data accepted as input.
+        error_message (str): Message displayed when invalid
+        input is entered. 
+
+    Returns: 
+        user_choice (type is variable): Specific user input based on
+        parameters. 
+    """
     while True:
         try:
             user_choice = variety(input(message))
@@ -14,7 +31,23 @@ def check_input(message, variety, error_message):
 
 
 def pos_int(message, error_message):
-    """To do."""
+    """
+    Gets and validates integer input.
+
+    This functions gets a positive integer
+    from the user as input, validates it,
+    and then returns it.
+
+    Parameters:
+        message (str): Message displayed when asking 
+        for input.
+        error_message (str): Message displayed when invalid
+        input is entered. 
+    
+    Returns:
+        user_choice (int): Specific user input based on
+        parameters. 
+    """
     while True:
         try:
             user_choice = int(input(message))
@@ -28,3 +61,4 @@ def pos_int(message, error_message):
         except:
             os.system("clear")
             print(error_message)
+            time.sleep(1)
