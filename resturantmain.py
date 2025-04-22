@@ -21,7 +21,7 @@ RESTAURANT_MENU = [
     ("Vegetarian Pizza", 20.99),
     ]
 
-# Stores customer order
+# Stores customer order.
 order = [
 
 ]
@@ -113,7 +113,7 @@ def menu():
             "4. - Confirm order\n"
             "5. - Cancel order\n"
             "6. - Exit\n",
-            "Please enter a valid choice 1, 2, 3, 4, or 5)")
+            "Please enter a valid choice 1, 2, 3, 4, 5, or 6)")
         os.system("clear")
         evaluate_input(menu_choice, 2)
 
@@ -393,7 +393,7 @@ def get_price():
     This function gets how much the
     customers order is going to cost.
     It gets the price of each meal
-    in order and adds them togethor,
+    in order and adds them together,
     later returning this value.
 
     Returns:
@@ -414,7 +414,7 @@ def print_order(type_):
     This function prints the customers
     order, this including the total price,
     the price of each singular meal, and
-    the orderd amount of each meal.
+    the ordered amount of each meal.
 
     Parameters:
         type_ (boolean): Eat-in or takeaway.
@@ -497,9 +497,8 @@ def confirm_order():
     """Confirm customer order.
 
     This function gets if the user wants
-    to confirm their customers order. It
-    then delegates the actions due to this
-    input.
+    to confirm their customers order and
+    acts accordingly.
     """
     while True:
         # Asks operator if they want to confirm order, saves this to variable.
